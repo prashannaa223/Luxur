@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 from Backend.Common import (
-    DATA_DIR, InputLanguage, GetMicrophoneStatus, QueryModifier, SetAssistantStatus,
+    DATA_DIR, InputLanguage, AnnouncementPending, GetMicrophoneStatus, QueryModifier, SetAssistantStatus, TypedPending,
 )
 
 HtmlCode = '''<!DOCTYPE html>
@@ -86,13 +86,13 @@ def UniversalTranslator(Text):
 
 
 def SpeechRecognition():
-    """Block until something is heard. Returns "" if the mic is switched off first."""
+    """Block until something is heard. Returns "" if the mic is switched off or text is typed first."""
     driver = Driver()
     driver.get(VOICE_HTML.as_uri())
     driver.find_element(by=By.ID, value="start").click()
 
     try:
-        while GetMicrophoneStatus() == "True":
+        while GetMicrophoneStatus() == "True" and not TypedPending() and not AnnouncementPending():
             Text = driver.find_element(by=By.ID, value="output").text
             if Text:
                 if InputLanguage.lower().startswith("en"):

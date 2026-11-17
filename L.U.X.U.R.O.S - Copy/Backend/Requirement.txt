@@ -1,16 +1,22 @@
 python-dotenv
 groq
 cohere
+huggingface_hub
 googlesearch-python
 selenium
 mtranslate
 pygame-ce
 edge-tts
-huggingface_hub
 PyQt5
 requests
 beautifulsoup4
 pillow
 rich
+psutil
+numpy
+sounddevice
+mss
+pyautogui
 AppOpener; sys_platform == "win32"
-keyboard; sys_platform == "win32"
+pygetwindow; sys_platform == "win32"
+pywinauto; sys_platform == "win32"

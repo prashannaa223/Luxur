@@ -1,10 +1,11 @@
 # Secrets
 .env
 
-# Runtime state written by the app
-L.U.X.U.R.O.S - Copy/Frontend/Files/*.data
-L.U.X.U.R.O.S - Copy/Data/*
-!L.U.X.U.R.O.S - Copy/Data/.gitkeep
+# Runtime data written by the app (chat log, Pulse Hub database, audio, state files)
+**/Data/*
+!**/Data/.gitkeep
+**/Frontend/Files/*
+!**/Frontend/Files/.gitkeep
 
 # Python
 __pycache__/

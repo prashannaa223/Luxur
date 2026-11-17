@@ -1,0 +1,7 @@
+# Store text with LF; Windows checkouts get CRLF automatically.
+* text=auto
+*.sh text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.gif binary
+*.db binary

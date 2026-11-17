@@ -1,67 +1,48 @@
-# Luxur
+# LUXUR OS
 
-AI voice assistant, model v1.beta.
+An AI that lives on your desktop. Talk or type: it answers, controls your computer, remembers what matters, and keeps you focused.
 
-You speak and Luxur works out what you want. It can chat, answer from live web
-search, open and close apps, play music on YouTube, write content to a file,
-generate images and control system volume.
+## Start
 
-## Setup (Windows)
+- **Windows:** double-click `start.bat`
+- **Linux (testing only):** `./start.sh`
 
-Requires Python 3.10+ and Google Chrome (Chrome handles speech recognition).
+The first run installs everything (a few minutes) and opens `.env`. Paste your keys, save, run it again.
 
-```powershell
-cd "L.U.X.U.R.O.S - Copy"
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r Backend\Requirement.txt
-copy .env.example .env   # then fill in your API keys
-python main.py
-```
-
-Keys you need:
-
-| Key | Used for | Get one at |
+| Key | Get it free at | Used for |
 | --- | --- | --- |
-| `GroqAPIKey` | Chat, realtime answers, content writing | console.groq.com |
-| `CohereAPIKey` | Deciding what kind of request you made | dashboard.cohere.com |
-| `HuggingFaceAPIKey` | Image generation | huggingface.co/settings/tokens |
+| `GroqAPIKey` | console.groq.com/keys | Chat, answers, the desktop agent |
+| `CohereAPIKey` | dashboard.cohere.com/api-keys | Understanding commands, reading the screen |
+| `HuggingFaceAPIKey` *(optional)* | huggingface.co/settings/tokens | Image generation |
 
-## Using it
+Check your keys: in `L.U.X.U.R.O.S - Copy`, run `.venv\Scripts\python -m Backend.SelfTest` (Windows) or `.venv/bin/python -m Backend.SelfTest` (Linux).
 
-- **Mic button** (or `Ctrl+M`): starts or stops listening. Switching it off while Luxur is talking stops the speech.
-- **Home / Chat** (or `Ctrl+1` / `Ctrl+2`): Home shows the live status core. Chat shows the conversation transcript.
-- Drag the top bar to move the window. Double-click it to maximize.
+## Use it
 
-Chat history is saved to `Data/ChatLog.json`. Generated images and written content also go to `Data/`.
+Press the mic button (`Ctrl+M`) and talk, or type in the **Chat** tab.
 
-To try one backend module on its own, run it as a module from the project folder,
-e.g. `python -m Backend.Chatbot` or `python -m Backend.TextToSpeech`.
+| Say | What happens |
+| --- | --- |
+| "Open Zen, play lo-fi on YouTube, then minimize it" | The desktop agent does it, step by step |
+| "Research the best laptops under $1000 and compare them" | Browses, compares, sums up |
+| "Remember my exam is on Friday" | Saved to Pulse Hub |
+| "Remind me at 9pm to call mom" | Speaks up at 9pm |
+| "Focus on my essay" / "Focus off" | Red UI, no distractions, strict answers |
+| "Rest" | Minimizes; say "Luxur" or clap 3 times to wake it |
 
-## Project layout
+**Pulse Hub** (`Ctrl+3`) shows LUXUR's memory as a live graph. Click a node to see what's connected.
 
-```
-main.py                  assistant loop + app entry point
-Backend/Common.py        paths, .env settings and shared helpers
-Backend/Model.py         classifies each request (Cohere)
-Backend/Chatbot.py       general chat (Groq)
-Backend/RealtimeSearchEngine.py  answers from Google results (Groq)
-Backend/Automation.py    open/close apps, YouTube, web search, content, volume
-Backend/ImageGeneration.py       Hugging Face text-to-image
-Backend/SpeakToText.py   speech recognition via headless Chrome
-Backend/TextToSpeech.py  edge-tts + pygame playback
-Frontend/GUI.py          PyQt5 interface
-```
+**Stop the agent:** tap the mic button, or slam the mouse into a screen corner.
 
-## Linux (testing only)
+## Privacy and safety
 
-Windows is the supported platform. The Linux code paths (`xdg-open`, `pactl`, `pkill`)
-are only there so the app can be smoke-tested on Linux. They are not maintained.
+- **Screen reading sends screenshots of the whole screen to Cohere.** It happens only during a task you asked for, and is skipped when the active window looks private (banking, mail, chat, sign-in). Other windows on screen are still visible, so close private ones first. Turn it off with `ScreenReading=off` in `.env`.
+- **LUXUR asks before** deleting, sending, posting, buying, passwords and logins, and before pressing Enter or clicking in chat, mail, shopping or payment windows. This check is best-effort, not a guarantee, so keep an eye on what it does.
+- **Focus Mode** only reads the active window's title, on your PC.
+- **Your data stays local** in `L.U.X.U.R.O.S - Copy/Data` (chat log and the Pulse Hub database). Back it up before updating.
 
-```sh
-cd "L.U.X.U.R.O.S - Copy"
-python -m venv .venv && . .venv/bin/activate
-pip install -r Backend/Requirement.txt
-cp .env.example .env   # then fill in your API keys
-python main.py
-```
+## Settings (`.env`)
+
+- `Browser=auto` picks the first installed of Zen, Helium, LibreWolf, Firefox, Brave, Vivaldi, Chrome, Edge. You can also name one.
+- `Username`, `Assistantname`, `InputLanguage`, `AssistantVoice`
+- **Free local brain (optional):** install [Ollama](https://ollama.com) and run `ollama pull qwen2.5:1.5b`. LUXUR then sorts your commands on your own PC (faster, offline) and falls back to Cohere when Ollama isn't running.
